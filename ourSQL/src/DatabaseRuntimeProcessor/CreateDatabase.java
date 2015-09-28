@@ -72,7 +72,8 @@ public class CreateDatabase {
         
         
         ArrayList<ArrayList<ArrayList<String>>> metadata = a;// variable donder se guarda al final
-        meta.setMetadata(metadata);
+     //   meta.setMetadata(metadata);
+       meta = new Metadata(a);
         storer.serializeMetadata(meta);
     }
 
