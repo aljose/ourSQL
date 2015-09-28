@@ -41,7 +41,7 @@ public class DropDatabase {
      */
     private boolean verifyExist(String dataBase) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer = StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
         storer.initStoredDataManager("asdqwe");
         ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
@@ -66,7 +66,7 @@ public class DropDatabase {
      */
     private void deleteMetadata(String databaseName) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer =  StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
 
         ArrayList<ArrayList<String>> tablaEsquema = meta.getMetadata().get(Constants.SCHEMA);
@@ -127,7 +127,7 @@ public class DropDatabase {
      */
     private void deleteSchema(String dataBase) {
 
-        StoredDataManager temp = new StoredDataManager();
+        StoredDataManager temp =  StoredDataManager.getInstance();
         temp.dropDatabase(dataBase);
 
     }

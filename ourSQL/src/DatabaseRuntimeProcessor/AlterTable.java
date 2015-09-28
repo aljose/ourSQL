@@ -20,7 +20,7 @@ public class AlterTable {
     public void alterTable(String schemaName, String tableName, String columnName, String tableReferenced,
             String referencedColumn) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer =  StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
         ArrayList<String> foreignTable = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class AlterTable {
         foreignTable.add(columnName);
         foreignTable.add(referencedColumn);
         foreignTable.add(tableReferenced);
-
+        
         meta.getMetadata().get(Constants.FOREIGNKEY).add(foreignTable);
 
         ArrayList<String> columnTable = new ArrayList<>();

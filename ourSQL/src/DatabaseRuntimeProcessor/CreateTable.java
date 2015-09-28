@@ -44,7 +44,7 @@ public class CreateTable {
      */
     private boolean verify(String database, String nombreTabla) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer =  StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
 
         ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.TABLES);
@@ -71,7 +71,7 @@ public class CreateTable {
      */
     private void addMetadata(String database, String nombreTabla, Row columns) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer =  StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
 
         ArrayList<Field> fields = columns.getColumns();
@@ -96,7 +96,7 @@ public class CreateTable {
      */
     private void addTable(String database, String tableName) {
 
-        StoredDataManager temp = new StoredDataManager();
+        StoredDataManager temp =  StoredDataManager.getInstance();
         temp.initStoredDataManager(database);
         temp.createTableFile(tableName);
         temp.flushToDisk();

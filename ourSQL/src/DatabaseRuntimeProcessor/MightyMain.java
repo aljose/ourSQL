@@ -36,7 +36,7 @@ public class MightyMain {
     public void processer(ArrayList<String> instruccion) {
 
         String instruction0 = instruccion.get(0);
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer = StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
         CreateMetadata createMeta = new CreateMetadata();
 

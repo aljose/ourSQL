@@ -37,7 +37,7 @@ public class CreateDatabase {
      */
     private boolean verifyExist(String dataBase) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer =  StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
 
         ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
@@ -61,7 +61,7 @@ public class CreateDatabase {
      */
     private void addMetadata(String databaseName) {
 
-        StoredDataManager storer = new StoredDataManager();
+        StoredDataManager storer  =  StoredDataManager.getInstance();
         Metadata meta = storer.deserealizateMetadata();
         ArrayList<String> schemaTable = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class CreateDatabase {
      */
     private void addSchema(String databaseName) {
 
-        StoredDataManager temp = new StoredDataManager();
+        StoredDataManager temp =  StoredDataManager.getInstance();
         temp.createDatabase(databaseName);
     }
 }
