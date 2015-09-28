@@ -24,25 +24,23 @@ public class InsertInto {
         boolean doesExist;
         insertManager = new StoredDataManager();
         Row rowToInsert = new Row();
+        doesExist = verifyExistence(schemaName, tableName, columns.get(0));
         
-       // doesExist = verifyExistence(schemaName, tableName, columns.get(0));
-        boolean inOrder;
-        doesExist = true;
         if (doesExist) {
             System.out.println("existe la tabla");
             rowToInsert = buildRow(columns, values, tableName, schemaName);
             rowToInsert.setTableName(tableName);
             insertManager.initStoredDataManager(schemaName);
-            System.out.println("datos" +rowToInsert.getTableName() +"+"+rowToInsert.getColumns().get(0).getContent());
+            System.out.println("datos" + rowToInsert.getTableName() + "+" + rowToInsert.getColumns().get(0).getContent());
             insertManager.insertIntoTable(rowToInsert);
-                    ArrayList<Row>  arrayRow = insertManager.getAllTuplesFromTable(tableName);
-        for(int i=0;i<arrayRow.size();i++){
-            ArrayList<Field> fieldList= arrayRow.get(i).getColumns();
-            for(int u=0;u<fieldList.size();u++){
-                System.out.print(fieldList.get(u).getContent()+"   ");
+            ArrayList<Row> arrayRow = insertManager.getAllTuplesFromTable(tableName);
+            for (int i = 0; i < arrayRow.size(); i++) {
+                ArrayList<Field> fieldList = arrayRow.get(i).getColumns();
+                for (int u = 0; u < fieldList.size(); u++) {
+                    System.out.print(fieldList.get(u).getContent() + "   ");
+                }
+                System.out.println();
             }
-            System.out.println();
-        }
         } else {
             System.out.println("Operation can not be completed. Table does not exist.");
         }
