@@ -37,6 +37,7 @@ public class GUI extends javax.swing.JFrame {
         bdbutton.setEnabled(false);
         filebutton.setEnabled(false);
         savebutton.setEnabled(false);
+        eraser.setEnabled(false);
         FixedColumnExample ejem = new FixedColumnExample();
         
         outputScrollPanel.setViewportView(ejem.table);
@@ -74,6 +75,7 @@ public class GUI extends javax.swing.JFrame {
         bdbutton = new javax.swing.JButton();
         filebutton = new javax.swing.JButton();
         savebutton = new javax.swing.JButton();
+        eraser = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         File = new javax.swing.JMenu();
         Edit = new javax.swing.JMenu();
@@ -99,7 +101,6 @@ public class GUI extends javax.swing.JFrame {
         });
 
         start.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/start.jpg"))); // NOI18N
-        start.setPreferredSize(new java.awt.Dimension(67, 43));
         start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startActionPerformed(evt);
@@ -134,6 +135,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        eraser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eraser.gif"))); // NOI18N
+        eraser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eraserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelButtonLayout = new javax.swing.GroupLayout(panelButton);
         panelButton.setLayout(panelButtonLayout);
         panelButtonLayout.setHorizontalGroup(
@@ -151,17 +159,22 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(filebutton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(savebutton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(eraser, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelButtonLayout.setVerticalGroup(
             panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(start1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(start, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(filebutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addComponent(bdbutton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(RUN, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(savebutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelButtonLayout.createSequentialGroup()
+                .addGroup(panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(start, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(start1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(filebutton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(eraser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bdbutton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RUN, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(savebutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
@@ -181,7 +194,7 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(panelLayout.createSequentialGroup()
                 .addComponent(panelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addComponent(textScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(outputTab, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(treeScrollPanel)
@@ -208,11 +221,11 @@ public class GUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
         );
 
         pack();
@@ -271,6 +284,7 @@ public class GUI extends javax.swing.JFrame {
         Run.setEnabled(true);
         bdbutton.setEnabled(true);
         filebutton.setEnabled(true);
+        eraser.setEnabled(true);
         savebutton.setEnabled(true);
     }//GEN-LAST:event_startActionPerformed
 
@@ -295,6 +309,12 @@ public class GUI extends javax.swing.JFrame {
     private void savebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savebuttonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_savebuttonActionPerformed
+
+    private void eraserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eraserActionPerformed
+        // TODO add your handling code here:
+        textEditor.removeAll();
+        textEditor.repaint();
+    }//GEN-LAST:event_eraserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -342,6 +362,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem Run;
     private javax.swing.JButton bdbutton;
     private javax.swing.JScrollPane checkScrollPanel;
+    private javax.swing.JButton eraser;
     private javax.swing.JButton filebutton;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JScrollPane outputScrollPanel;

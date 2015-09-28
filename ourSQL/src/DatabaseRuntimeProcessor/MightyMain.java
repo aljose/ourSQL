@@ -161,7 +161,7 @@ public class MightyMain {
                         columnas.add(campo);
                     }
                     Row columnas1 = new Row(columnas);
-                    createTab.createTable("tablas", instruccion.get(2), columnas1);
+                    createTab.createTable(databaseName, instruccion.get(2), columnas1);
                     PlanEjecucion plan = new PlanEjecucion("createTable", instruccion);
 
                     queryColumns.add(databaseName);
@@ -178,7 +178,7 @@ public class MightyMain {
 
                 if (instruccion.get(1).equals("table")) {
                     DropTable dropTab = new DropTable();
-                    dropTab.dropTable("tablas", instruccion.get(2));
+                    dropTab.dropTable(databaseName, instruccion.get(2));
                     PlanEjecucion plan = new PlanEjecucion("dropTable", instruccion);
 
                     queryColumns.add(databaseName);
@@ -334,7 +334,7 @@ public class MightyMain {
                     }
                 }
                 InsertInto ins = new InsertInto();
-                ins.executeInsertion(instruccion.get(2), cols, valores, "tablas");
+                ins.executeInsertion(instruccion.get(2), cols, valores, databaseName);
 
                 queryColumns.add(databaseName);
                 queryColumns.add(instruccion.get(2));

@@ -128,6 +128,7 @@ MightyMain mm = new MightyMain();
             if (token1.equalsIgnoreCase("database") && instructionSize == 3) {
 
                 if (!isNumeric(instruction.get(2))) {
+                    mm.processer(instruction);
                     return true;
                 }
             }

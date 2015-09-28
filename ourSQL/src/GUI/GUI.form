@@ -50,12 +50,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panel" alignment="0" pref="573" max="32767" attributes="0"/>
+          <Component id="panel" alignment="0" pref="574" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panel" alignment="0" pref="313" max="32767" attributes="0"/>
+          <Component id="panel" alignment="0" pref="379" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -86,7 +86,7 @@
               <Group type="102" attributes="0">
                   <Component id="panelButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="textScrollPanel" pref="115" max="32767" attributes="0"/>
+                  <Component id="textScrollPanel" pref="180" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="outputTab" min="-2" pref="143" max="-2" attributes="0"/>
               </Group>
@@ -157,20 +157,26 @@
                       <Component id="filebutton" min="-2" pref="42" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="savebutton" min="-2" pref="42" max="-2" attributes="0"/>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="eraser" min="-2" pref="42" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="start1" max="32767" attributes="0"/>
-                  <Component id="start" max="32767" attributes="0"/>
-                  <Component id="filebutton" alignment="1" max="32767" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="bdbutton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="RUN" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="start" alignment="0" max="32767" attributes="0"/>
+                          <Component id="start1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="filebutton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="eraser" max="32767" attributes="0"/>
+                          <Component id="bdbutton" alignment="0" max="32767" attributes="0"/>
+                          <Component id="RUN" alignment="0" max="32767" attributes="0"/>
+                          <Component id="savebutton" alignment="1" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="savebutton" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -233,6 +239,16 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="savebuttonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="eraser">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/images/eraser.gif"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="eraserActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
