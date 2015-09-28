@@ -47,16 +47,16 @@ public class CreateTable {
         StoredDataManager storer = new StoredDataManager();
         Metadata meta = storer.deserealizateMetadata();
 
-//        ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.TABLES);
-//
-//        for (ArrayList<String> fila : metadata) {
-//
-//            if (fila.get(Constants.TABLE_TABNAME).equals(nombreTabla)
-//                    && fila.get(Constants.TABLE_SCHNAME).equals(database)) {
-//
-//                return false;
-//            }
-//        }
+        ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.TABLES);
+
+        for (ArrayList<String> fila : metadata) {
+
+            if (fila.get(Constants.TABLE_TABNAME).equals(nombreTabla)
+                    && fila.get(Constants.TABLE_SCHNAME).equals(database)) {
+
+                return false;
+            }
+        }
         return true;
 
     }
@@ -82,10 +82,10 @@ public class CreateTable {
         filaInsertar.add(nombreTabla);
         filaInsertar.add(primerCampo.getContent());
 
-//        meta.getMetadata().get(Constants.TABLES).add(filaInsertar);
+        meta.getMetadata().get(Constants.TABLES).add(filaInsertar);
 
-    //    ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
-      //  meta.setMetadata(metadata);
+        ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
+        meta.setMetadata(metadata);
         storer.serializeMetadata(meta);
     }
 

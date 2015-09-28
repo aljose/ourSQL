@@ -45,19 +45,19 @@ public class DropTable {
         FetchMetadata fetcher = new FetchMetadata();
         Table tablasForeign = fetcher.fetchForeignKey();
         
-//        ArrayList<Row> filas = tablasForeign.getRows();
-//        
-//        for ( Row fila : filas  ){
-//            
-//            ArrayList<Field> campos = fila.getColumns();
-//            
-//            String tablaOrigen = campos.get(3).getContent();
-//            String esquema = campos.get(4).getContent();
-//            if (tablaOrigen.equals(nombreTabla) &&  esquema.equals(nombreEsquema) ){
-//       
-//                return false;
-//            }
-//        }
+        ArrayList<Row> filas = tablasForeign.getRows();
+        
+        for ( Row fila : filas  ){
+            
+            ArrayList<Field> campos = fila.getColumns();
+            
+            String tablaOrigen = campos.get(3).getContent();
+            String esquema = campos.get(4).getContent();
+            if (tablaOrigen.equals(nombreTabla) &&  esquema.equals(nombreEsquema) ){
+       
+                return false;
+            }
+        }
         return true;
     }
     

@@ -24,7 +24,7 @@ public class CreateDatabase {
             System.out.println("No se puede crear la base de datos");
             return;
         }
-        //addMetadata(dataBase);
+        addMetadata(dataBase);
         addSchema(dataBase);
     }
 
@@ -40,17 +40,17 @@ public class CreateDatabase {
         StoredDataManager storer = new StoredDataManager();
         Metadata meta = storer.deserealizateMetadata();
 
-//        ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
+        ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
 
-//        for (ArrayList<String> fila : metadata) {
-//
-//            for (String campo : fila) {
-//
-//                if (campo.equals(dataBase)) {
-//                    return false;
-//                }
-//            }
-//        }
+        for (ArrayList<String> fila : metadata) {
+
+            for (String campo : fila) {
+
+                if (campo.equals(dataBase)) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 

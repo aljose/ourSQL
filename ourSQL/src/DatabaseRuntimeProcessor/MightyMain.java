@@ -5,13 +5,13 @@ package DatabaseRuntimeProcessor;
  *     Clase inicializa y recibe las instrucciones del usuario ejecuta los analisis y retorna los 
  *     outputs. 
  */
-import Analysis.LexicalAnalysis;
 import GUI.GUI;
 import Shared.Structures.Field;
 import Shared.Structures.Metadata;
 import Shared.Structures.Row;
 import StoredDataManager.Main.StoredDataManager;
 import SystemCatalog.Constants;
+import SystemCatalog.CreateMetadata;
 
 import java.util.ArrayList;
 
@@ -30,17 +30,7 @@ public class MightyMain {
      * @param args
      */
     public static void main(String[] args) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                  guiInstance.setVisible(true);
-          if(guiInstance.getRUN().getAction().isEnabled()){
-              System.out.println("presssss");
-          }
-            }
-        });
-              
-       
-       
+
 
     }
 
@@ -49,7 +39,10 @@ public class MightyMain {
         String instruction0 = instruccion.get(0);
         StoredDataManager storer = new StoredDataManager();
         Metadata meta = storer.deserealizateMetadata();
-        //ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
+        CreateMetadata createMeta = new CreateMetadata();
+
+        createMeta.buildSystemCatalog();
+        ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
         ArrayList<String> queryColumns = new ArrayList<>();
 
         switch (instruction0) {
@@ -67,7 +60,7 @@ public class MightyMain {
                     queryColumns.add("createIndex");
                     meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                    //meta.setMetadata(metadata);
+                    meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
 
                     break;
@@ -81,9 +74,9 @@ public class MightyMain {
                     queryColumns.add(instruccion.get(2));
                     queryColumns.add(" ");
                     queryColumns.add("createDatabase");
-                    //meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                    meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                   // meta.setMetadata(metadata);
+                     meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
 
@@ -172,9 +165,9 @@ public class MightyMain {
                     queryColumns.add(databaseName);
                     queryColumns.add(instruccion.get(2));
                     queryColumns.add("createTable");
-//                    meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                    meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                   // meta.setMetadata(metadata);
+                     meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
 
@@ -189,9 +182,9 @@ public class MightyMain {
                     queryColumns.add(databaseName);
                     queryColumns.add(instruccion.get(2));
                     queryColumns.add("dropTable");
-                   // meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                    meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                   // meta.setMetadata(metadata);
+                     meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
 
@@ -203,9 +196,9 @@ public class MightyMain {
                     queryColumns.add(databaseName);
                     queryColumns.add(" ");
                     queryColumns.add("dropDatabase");
-                  //  meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                   meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                  //  meta.setMetadata(metadata);
+                      meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
                 }
@@ -224,7 +217,7 @@ public class MightyMain {
                 queryColumns.add("listDatabases");
                 meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-               // meta.setMetadata(metadata);
+                 meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
                 break;
 
@@ -238,7 +231,7 @@ public class MightyMain {
                 queryColumns.add("displayDatabases");
                 meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                //meta.setMetadata(metadata);
+                meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
                 break;
 
@@ -251,7 +244,7 @@ public class MightyMain {
                 queryColumns.add("setDatabase");
                 meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                //meta.setMetadata(metadata);
+                meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
                 break;
 
@@ -265,7 +258,7 @@ public class MightyMain {
                 queryColumns.add("alterTable");
                 meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-               // meta.setMetadata(metadata);
+                 meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
                 break;
 
@@ -314,9 +307,9 @@ public class MightyMain {
                 queryColumns.add(databaseName);
                 queryColumns.add(instruccion.get(2));
                 queryColumns.add("insertInto");
-            //    meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                //meta.setMetadata(metadata);
+                meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
 
         }

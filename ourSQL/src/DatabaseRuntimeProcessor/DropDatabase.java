@@ -24,11 +24,11 @@ public class DropDatabase {
 
     public void dropDatabase(String dataBase) {
 
-//        if (!verifyExist(dataBase)) {
-//            System.out.println("No se puede eliminar la base de datos ya que no existe la base de datos");
-//            return;
-//        }
-       // deleteMetadata(dataBase);
+        if (!verifyExist(dataBase)) {
+            System.out.println("No se puede eliminar la base de datos ya que no existe la base de datos");
+            return;
+        }
+        deleteMetadata(dataBase);
         deleteSchema(dataBase);
     }
 
@@ -44,17 +44,17 @@ public class DropDatabase {
         StoredDataManager storer = new StoredDataManager();
         Metadata meta = storer.deserealizateMetadata();
 
-//        ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
+        ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
 
-//        for (ArrayList<String> fila : metadata) {
-//
-//            for (String campo : fila) {
-//
-//                if (campo.equals(dataBase)) {
-//                    return true;
-//                }
-//            }
-//        }
+        for (ArrayList<String> fila : metadata) {
+
+            for (String campo : fila) {
+
+                if (campo.equals(dataBase)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
