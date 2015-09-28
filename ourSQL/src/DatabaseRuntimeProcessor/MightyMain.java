@@ -5,7 +5,6 @@ package DatabaseRuntimeProcessor;
  *     Clase inicializa y recibe las instrucciones del usuario ejecuta los analisis y retorna los 
  *     outputs. 
  */
-import GUI.GUI;
 import Shared.Structures.Field;
 import Shared.Structures.Metadata;
 import Shared.Structures.Row;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 public class MightyMain {
 
     private String databaseName;
-    static GUI guiInstance = new GUI();
 
     /**
      * Ejecuta main
