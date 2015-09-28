@@ -22,7 +22,7 @@ public class InsertInto {
 
     public void executeInsertion(String tableName, ArrayList<String> columns, ArrayList<String> values, String schemaName) {
         boolean doesExist;
-        insertManager = new StoredDataManager();
+        insertManager =  StoredDataManager.getInstance();
         Row rowToInsert = new Row();
         doesExist = verifyExistence(schemaName, tableName, columns.get(0));
         
