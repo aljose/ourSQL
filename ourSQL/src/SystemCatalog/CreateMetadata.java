@@ -94,7 +94,7 @@ public class CreateMetadata {
         foreignTable.add(foreignKeyColumns);
 
         Metadata met;
-        StoredDataManager storedDataManager = new StoredDataManager();
+        StoredDataManager storedDataManager =  StoredDataManager.getInstance();
         met = storedDataManager.deserealizateMetadata();
         if (met == null) {
             metadata.add(schemaTable);

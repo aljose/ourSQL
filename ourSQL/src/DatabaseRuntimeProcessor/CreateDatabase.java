@@ -67,7 +67,7 @@ public class CreateDatabase {
 
         ArrayList<ArrayList<ArrayList<String>>>  a= meta.getMetadata();
         schemaTable.add(databaseName);
-
+        System.out.println(a.get(Constants.SCHEMA));
         a.get(Constants.SCHEMA).add(schemaTable);
         
         

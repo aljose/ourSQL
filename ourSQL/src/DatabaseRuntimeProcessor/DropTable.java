@@ -1,132 +1,120 @@
 package DatabaseRuntimeProcessor;
 
 import Shared.Structures.Field;
+import Shared.Structures.Metadata;
 import Shared.Structures.Row;
 import Shared.Structures.Table;
 import StoredDataManager.Main.StoredDataManager;
+import SystemCatalog.Constants;
 import java.util.ArrayList;
-import SystemCatalog.FetchMetadata;
-import SystemCatalog.WriteMetadata;
 
-/*
- * Drop Table
- *  Elimina una tabla de un esquema
- * 
- */
 
-/**
+
+ 
+ 
+
+ /*
+ *@author Nicolas Jimenez
  *
- * @author Nicolas Jimenez
- */
+*/
 public class DropTable {
-   
-    /**
-     * 
-     * @param nombreEsquema
-     * @param nombreTabla 
-     */
-    public void dropTable( String nombreEsquema, String nombreTabla ) {
-        
-        if ( !verifyIntegrity( nombreEsquema, nombreTabla))
-            return;
-        
-       // deleteFromMetadata( nombreEsquema, nombreTabla );
-        deleteFromDisc( nombreEsquema,  nombreTabla);
-    }
-    
-    /**
-     * 
-     * @param nombreEsquema
-     * @param nombreTabla
-     * @return 
-     */
-    public boolean verifyIntegrity (  String nombreEsquema, String nombreTabla) {
-        
-        FetchMetadata fetcher = new FetchMetadata();
-        Table tablasForeign = fetcher.fetchForeignKey();
-        
-        ArrayList<Row> filas = tablasForeign.getRows();
-        
-        for ( Row fila : filas  ){
-            
-            ArrayList<Field> campos = fila.getColumns();
-            
-            String tablaOrigen = campos.get(3).getContent();
-            String esquema = campos.get(4).getContent();
-            if (tablaOrigen.equals(nombreTabla) &&  esquema.equals(nombreEsquema) ){
-       
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    /**
-     * 
-     * @param nombreEsquema
-     * @param nombreTabla 
-     */
-    public void deleteFromMetadata ( String nombreEsquema, String nombreTabla){
-        
-        FetchMetadata fetcher = new FetchMetadata();
-        Table tablas = fetcher.fetchTables();
-        Table columnas = fetcher.fetchColumns();
-        Table foreign = fetcher.fetchForeignKey();
-        WriteMetadata editer = new WriteMetadata();
 
-        ArrayList<Row> filasTablas = tablas.getRows();
-        
-        for (Row fila: filasTablas ) {
-            
-            ArrayList<Field> campos = fila.getColumns();
+ 
+/* 
+* @param nombreEsquema
+ *@param nombreTabla
+ */
+ public void dropTable(String nombreEsquema, String nombreTabla) {
 
-            String esquema = campos.get(0).getContent();
-            String tabla = campos.get(1).getContent();
-            
-            if ( esquema.equals(nombreEsquema) && tabla.equals(nombreTabla) ){
-            
-                editer.deleteTabla(nombreEsquema, nombreTabla);
-            }
-        }
+ if (!verifyIntegrity(nombreEsquema, nombreTabla)) {
+ return;
+ }
 
-        ArrayList<Row> filasColumnas = columnas.getRows();
-        
-        for (Row fila: filasColumnas ) {
-            
-            ArrayList<Field> campos = fila.getColumns();
+ deleteFromMetadata(nombreEsquema, nombreTabla);
+ deleteFromDisc(nombreEsquema, nombreTabla);
+ }
 
-            String esquema = campos.get(0).getContent();
-            String tabla = campos.get(1).getContent();
-            
-            if ( esquema.equals(nombreEsquema) && tabla.equals(nombreTabla) ){
-                
-                String nombreColumna = campos.get(2).getContent();
-                
-                editer.deleteColumna(nombreColumna, nombreTabla, nombreEsquema);
-            }
-        }
-        
-        ArrayList<Row> filasForeign = foreign.getRows();
-        
-        for (Row fila: filasForeign ) {
-            
-            ArrayList<Field> campos = fila.getColumns();
+ 
+/* 
+ *@param nombreEsquema
+ *@param nombreTabla
+ *@return
+ */
+ public boolean verifyIntegrity(String nombreEsquema, String nombreTabla) {
 
-            String esquema = campos.get(4).getContent();
-            String tabla = campos.get(2).getContent();
-            
-            if ( esquema.equals(nombreEsquema) && tabla.equals(nombreTabla) ){
-                
-               editer.deleteForeignKey(esquema);
-            }
-        }        
-    }
-    
-    public void deleteFromDisc(String databaseName, String tableName){
-        
-        StoredDataManager temp =  StoredDataManager.getInstance();
-        temp.initStoredDataManager(databaseName);
-        System.out.println("Drop table"+temp.dropTable(tableName));
-    }
-    
+ StoredDataManager storer =  StoredDataManager.getInstance();
+ Metadata meta = storer.deserealizateMetadata();
+
+ ArrayList<ArrayList<String>> tablaTabla = meta.getMetadata().get(Constants.TABLES);
+
+ for (int i = 0; i< tablaTabla.size(); i++) {
+
+ ArrayList<String> fila = tablaTabla.get(i);
+
+ if (fila.get(Constants.TABLE_FK).equals(true)) {
+
+ return false;
+ }
+ }
+ return true;
+ }
+
+ 
+ 
+ /*@param databaseName
+ *@param nombreEsquema
+ *@param nombreTabla
+ */
+ public void deleteFromMetadata(String databaseName, String nombreTabla) {
+
+ StoredDataManager storer = StoredDataManager.getInstance();
+ Metadata meta = storer.deserealizateMetadata();
+
+ ArrayList<ArrayList<String>> tablaTabla = meta.getMetadata().get(Constants.TABLES);
+
+ for (int i = 0; i< tablaTabla.size(); i++) {
+
+ ArrayList<String> fila = tablaTabla.get(i);
+
+ if (fila.get(Constants.TABLE_SCHNAME).equals(databaseName)) {
+
+ meta.getMetadata().get(Constants.TABLES).remove(i);
+ }
+ }
+ ArrayList<ArrayList<String>> tablaCol = meta.getMetadata().get(Constants.COLUMNS);
+
+ for (int i = 0; i <tablaCol.size(); i++) {
+
+ ArrayList<String> fila = tablaCol.get(i);
+
+ if (fila.get(Constants.COLUMNS_SCHNAME).equals(databaseName)
+ && fila.get(Constants.COLUMNS_TABNAME).equals(nombreTabla)) {
+
+ meta.getMetadata().get(Constants.COLUMNS).remove(i);
+ }
+ }
+
+ ArrayList<ArrayList<String>> tablaFor = meta.getMetadata().get(Constants.FOREIGNKEY);
+
+ for (int i = 0; i< tablaFor.size(); i++) {
+
+ ArrayList<String> fila = tablaFor.get(i);
+
+ if (fila.get(Constants.FK_SCHNAME).equals(databaseName)) {
+
+ meta.getMetadata().get(Constants.FOREIGNKEY).remove(i);
+ }
+ }
+ ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
+ meta.setMetadata(metadata);
+ storer.serializeMetadata(meta);
+ }
+
+ public void deleteFromDisc(String databaseName, String tableName) {
+
+ StoredDataManager temp =  StoredDataManager.getInstance();
+ temp.initStoredDataManager(databaseName);
+ System.out.println("Drop table " + temp.dropTable(tableName));
+ }
+
 }
