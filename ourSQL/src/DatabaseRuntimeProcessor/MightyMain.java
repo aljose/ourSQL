@@ -270,7 +270,7 @@ public class MightyMain {
                 ArrayList<String> columnas = new ArrayList<>();
                 ArrayList<String> tables = new ArrayList<>();
 
-                int i;
+                int i=0;
                 if (instruccion.get(1).equals("*")) {
                     columnas.add("*");
                 } else {
@@ -316,18 +316,18 @@ public class MightyMain {
                 ArrayList<String> cols = new ArrayList<>();
                 ArrayList<String> valores = new ArrayList<>();
 
-                int i;
-                for (i = 4; !instruccion.get(i).equals(")"); i++) {
+                int in;
+                for (in = 4; !instruccion.get(in).equals(")"); in++) {
 
-                    String elementoActual = instruccion.get(i);
+                    String elementoActual = instruccion.get(in);
                     if (!elementoActual.equals(",") && !elementoActual.equals(")")) {
 
                         cols.add(elementoActual);
                     }
                 }
-                for (i = i + 3; !instruccion.get(i).equals(")"); i++) {
+                for (in = in + 3; !instruccion.get(in).equals(")"); in++) {
 
-                    String elementoActual = instruccion.get(i);
+                    String elementoActual = instruccion.get(in);
                     if (!elementoActual.equals(",") && !elementoActual.equals(")")) {
 
                         valores.add(elementoActual);

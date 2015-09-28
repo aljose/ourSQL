@@ -1,7 +1,11 @@
 package DatabaseRuntimeProcessor;
 
 import Shared.Structures.Field;
+import Shared.Structures.Metadata;
+import Shared.Structures.Row;
 import Shared.Structures.Table;
+import StoredDataManager.Main.StoredDataManager;
+import SystemCatalog.Constants;
 import java.util.ArrayList;
 
 /*
@@ -17,12 +21,14 @@ import java.util.ArrayList;
 public class Select {
     
     private final ArrayList<String> columns;
-    
-    private final ArrayList<Table> tables;
+    StoredDataManager storer ;
+    private final ArrayList<String> tables;
     private String colCond;
     private String Ope;
     private int value;
     private boolean flagAs;
+    private String database;
+    private Metadata met;
     
     
 
@@ -32,124 +38,85 @@ public class Select {
      *
      * @param columns
      * @param tables
+     * @param Database
      */
-    public Select(ArrayList<String> columns, ArrayList<Table> tables) { //ver si recibe las tablas o los nombres
+    public Select( String Database, ArrayList<String> columns, ArrayList<String> tables) { 
+        storer =  StoredDataManager.getInstance();
+        storer.initStoredDataManager(Database);
         this.columns = columns;
         this.tables = tables;
+        if (!columns.get(0).equals("*")){
+            System.out.println("no asterisco");
+            for(int i = 0; i<columns.size();i++){
+                for(int j = 0; j<tables.size(); j++){
+            int localCol = locCol(columns.get(i), tables.get(j));
+           ArrayList<Row> filas = storer.getAllTuplesFromTable(tables.get(j));
+            for (int count=0; count<filas.size();count++){
+                    System.out.print(filas.get(count).getColumns().get(localCol).getContent()+"->");
+                }
+                    System.out.println("\n");
+            
+                }
+            }
+        }else{
+            System.out.println("asterisco");
+            for(int j = 0; j<tables.size(); j++){
+                System.out.println("primer ciclo");
+                        ArrayList<Row>  arrayRow = storer.getAllTuplesFromTable(tables.get(j));
+                        System.out.println("array" + arrayRow.get(j).getTableName());
+        for(int i=0;i<arrayRow.size();i++){
+            System.out.println("segundo");
+            ArrayList<Field> fieldList= arrayRow.get(i).getColumns();
+            for(int u=0;u<fieldList.size();u++){
+                System.out.print(fieldList.get(u).getContent()+" ->  ");
+            }
+            System.out.println();
+        }
 
-        if (columns.size() == 1 & columns.get(0).equals("*")) {
-            //imprimir toda la tabla o tablas
-                flagAs = true;
-        } else {
-        flagAs = false;
         }
         
-
-            for (int i = 0; i < columns.size(); i++) { //navegar en las columnas 
-                String tempColumn = columns.get(i);
-
-                for (int j = 0; j < tables.size(); j++) { //navegar en las tablas
-                    int countColumn = 0;
-
-                    while (countColumn < tables.get(j).getRows().get(0).getColumns().size()) { //navegar en las columnas de las tablas
-
-                        if (tables.get(j).getRows().get(0).getColumns()
-                               .get(countColumn).getContent().equals(tempColumn)&& !flagAs) { //condicional para *
-
-                            for (int countRow = 0; countRow < tables.get(j).getRows().size(); countRow++) { //navegar por toda la columna de una tabla en específico
-                                System.out.println(tables.get(j).getRows().get(countRow).getColumns().get(countColumn)); //impresion o agreagado a tabla
-                            }
-                        }else{
-                            for (int countRow = 0; countRow < tables.get(j).getRows().size(); countRow++) { //navegar por toda la columna de una tabla en específico
-                                System.out.println(tables.get(j).getRows().get(countRow).getColumns().get(countColumn)); //impresion o agreagado a tabla
-                            }
-                        }
-                        countColumn++;
-                    }
-
-                }
-            
-        }
+        }     
+       
     }
     
-    /**
-     * Caso de constructor donde hay una condición de selección where.
-     * @param columns
-     * @param tables
-     * @param colCond
-     * @param Ope
-     * @param value 
-     */
-    public Select(ArrayList<String> columns, ArrayList<Table> tables, String colCond, String Ope, int value ){
-        this.columns = columns;
-        this.tables = tables;
-        this.Ope = Ope;
-        this.colCond = colCond;
-        this.value = value;
-        
-        if (columns.size() == 1 & columns.get(0).equals("*")) {
-            //imprimir toda la tabla o tablas
-                flagAs = true;
-        } else {
-        flagAs = false;
-        }
-        
-        int columnWhere= searchNumCol();
-        for (int i = 0; i < columns.size(); i++) { //navegar en las columnas 
-                String tempColumn = columns.get(i);
-
-                for (int j = 0; j < tables.size(); j++) { //navegar en las tablas
-                    int countColumn = 0;
-
-                    while (countColumn < tables.get(j).getRows().get(0).getColumns().size()) { //navegar en las columnas de las tablas
-
-                        if (tables.get(j).getRows().get(0).getColumns()
-                                .get(countColumn).getContent().equals(tempColumn)&&!flagAs) {
-                            for (int countRow = 0; countRow < tables.get(j).getRows().size(); countRow++) { //navegar por toda la columna de una tabla en específico
-                                if (verifyCond(tables.get(j).getRows().get(countRow).getColumns().get(columnWhere).getContent())){//método para boolean condicion
-                                                                    System.out.println(tables.get(j).getRows().get(countRow).getColumns().get(countColumn).getContent()); //impresion o agreagado a tabla
-                                }
-                                
-                                }
-                        }else{
-                            for (int countRow = 0; countRow < tables.get(j).getRows().size(); countRow++) { //navegar por toda la columna de una tabla en específico
-                                if (verifyCond(tables.get(j).getRows().get(countRow).getColumns().get(columnWhere).getContent())){//método para boolean condicion
-                                                                    System.out.println(tables.get(j).getRows().get(countRow).getColumns().get(countColumn).getContent()); //impresion o agreagado a tabla
-                                }
-                                
-                                }
-                        }
-                        countColumn++;
+    public int locCol(String column, String Table){
+        int temp = 0;
+        met= storer.deserealizateMetadata();
+        ArrayList<ArrayList<ArrayList<String>>> metada = met.getMetadata();
+        ArrayList<ArrayList<String>> table = metada.get(Constants.COLUMNS);
+            
+        for (int i=0; i<table.size(); i++ ){
+            
+            for(int j = 0; j<table.get(i).size();i++){
+                int contador = 0;
+                if (table.get(i).get(Constants.TABLE_SCHNAME).equals(database) 
+                        && table.get(i).get(Constants.TABLE_TABNAME).equals(Table) ){
+                    if (table.get(i).get(Constants.COLUMNS_COL).equals(column)){
+                        temp = contador;
+                    }else{
+                        contador++;
                     }
-
+                    
                 }
-            }
-        
-    }
-    /**
-     * Método encargado de dar el número de columna, donde se debe verificar la condición
-     * @return 
-     */
-    public int searchNumCol() {
-        int temp=-1;
-        for (int j = 0; j < tables.size(); j++) { //navegar en las tablas
-            int countColumn = 0;
-
-            while (countColumn < tables.get(j).getRows().get(0).getColumns().size()) { //navegar en las columnas de las tablas
-
-                if (tables.get(j).getRows().get(0).getColumns()
-                        .get(countColumn).getContent().equals(colCond)) {
-                    temp = countColumn;
-                    break;
-                 
-                }
-            }
-            if (temp!= -1){
-                break;
             }
         }
+        
         return temp;
     }
+//    /**
+//     * Caso de constructor donde hay una condición de selección where.
+//     * @param columns
+//     * @param tables
+//     * @param colCond
+//     * @param Ope
+//     * @param value 
+//     */
+//    public Select(ArrayList<String> columns, ArrayList<String> tables, String colCond, String Ope, int value ){
+//       
+//        
+//    }
+   
+   
     //falta agregar condición para covertir el dato según el tipo de dato
     /**
      * Método de de verificar si la condición del where se va cumpliendo para 
