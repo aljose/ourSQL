@@ -267,6 +267,35 @@ public class MightyMain {
 
             case "select":
 
+                ArrayList<String> columnas = new ArrayList<>();
+                ArrayList<String> tables = new ArrayList<>();
+
+                int i;
+                if (instruccion.get(1).equals("*")) {
+                    columnas.add("*");
+                } else {
+                    for (i = 1; i < instruccion.size(); i++) {
+
+                        String element = instruccion.get(i);
+                        if (!element.equals(",") && !element.equals("from")) {
+
+                            columnas.add(element);
+                        } else if (element.equals("from")) {
+
+                            break;
+                        }
+                    }
+                }
+                for (int j = i + 1; j < instruccion.size(); j++) {
+
+                    String element = instruccion.get(i);
+                    if ( !element.equals("join")) {
+                        
+                        tables.add(element);
+                    }
+                }
+            Select sel = new Select( databaseName, columnas, tables );
+
             case "update":
 
                 if (instruccion.size() > 6) {
