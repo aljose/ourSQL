@@ -43,7 +43,7 @@ public class DropDatabase {
 
         StoredDataManager storer = new StoredDataManager();
         Metadata meta = storer.deserealizateMetadata();
-
+        storer.initStoredDataManager("asdqwe");
         ArrayList<ArrayList<String>> metadata = meta.getMetadata().get(Constants.SCHEMA);
 
         for (ArrayList<String> fila : metadata) {

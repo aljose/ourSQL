@@ -65,11 +65,13 @@ public class CreateDatabase {
         Metadata meta = storer.deserealizateMetadata();
         ArrayList<String> schemaTable = new ArrayList<>();
 
+        ArrayList<ArrayList<ArrayList<String>>>  a= meta.getMetadata();
         schemaTable.add(databaseName);
 
-        meta.getMetadata().get(Constants.SCHEMA).add(schemaTable);
-
-        ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
+        a.get(Constants.SCHEMA).add(schemaTable);
+        
+        
+        ArrayList<ArrayList<ArrayList<String>>> metadata = a;// variable donder se guarda al final
         meta.setMetadata(metadata);
         storer.serializeMetadata(meta);
     }

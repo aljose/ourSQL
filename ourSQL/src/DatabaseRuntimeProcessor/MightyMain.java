@@ -31,7 +31,6 @@ public class MightyMain {
      */
     public static void main(String[] args) {
 
-
     }
 
     public void processer(ArrayList<String> instruccion) {
@@ -76,7 +75,9 @@ public class MightyMain {
                     queryColumns.add("createDatabase");
                     meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                     meta.setMetadata(metadata);
+                    storer.initStoredDataManager(instruccion.get(2));
+
+                    meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
 
@@ -167,7 +168,7 @@ public class MightyMain {
                     queryColumns.add("createTable");
                     meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                     meta.setMetadata(metadata);
+                    meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
 
@@ -183,8 +184,9 @@ public class MightyMain {
                     queryColumns.add(instruccion.get(2));
                     queryColumns.add("dropTable");
                     meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                       storer.initStoredDataManager( instruccion.get(2) );
 
-                     meta.setMetadata(metadata);
+                    meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
 
@@ -196,9 +198,9 @@ public class MightyMain {
                     queryColumns.add(databaseName);
                     queryColumns.add(" ");
                     queryColumns.add("dropDatabase");
-                   meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
+                    meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                      meta.setMetadata(metadata);
+                    meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
                     break;
                 }
@@ -217,7 +219,7 @@ public class MightyMain {
                 queryColumns.add("listDatabases");
                 meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                 meta.setMetadata(metadata);
+                meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
                 break;
 
@@ -258,7 +260,7 @@ public class MightyMain {
                 queryColumns.add("alterTable");
                 meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
 
-                 meta.setMetadata(metadata);
+                meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
                 break;
 
