@@ -1,8 +1,6 @@
 package DatabaseRuntimeProcessor;
 
-import Shared.Structures.Field;
 import Shared.Structures.Metadata;
-import Shared.Structures.Table;
 import StoredDataManager.Main.StoredDataManager;
 import SystemCatalog.Constants;
 import java.util.ArrayList;
@@ -39,5 +37,4 @@ public class ListDatabases {
         }
         return buildResult.toString();
     }
-
 }
