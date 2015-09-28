@@ -35,10 +35,13 @@ public class MightyMain {
 
         String instruction0 = instruccion.get(0);
         StoredDataManager storer = StoredDataManager.getInstance();
-        Metadata meta = storer.deserealizateMetadata();
-        CreateMetadata createMeta = new CreateMetadata();
+        Metadata meta = new Metadata();
+        meta = storer.deserealizateMetadata();
+        if (meta == null) {
+            CreateMetadata createMeta = new CreateMetadata();
+            createMeta.buildSystemCatalog();
+        }
 
-        createMeta.buildSystemCatalog();
         ArrayList<ArrayList<ArrayList<String>>> metadata = meta.getMetadata();// variable donder se guarda al final
         ArrayList<String> queryColumns = new ArrayList<>();
 
@@ -182,7 +185,7 @@ public class MightyMain {
                     queryColumns.add(instruccion.get(2));
                     queryColumns.add("dropTable");
                     meta.getMetadata().get(Constants.QUERYLOG).add(queryColumns);
-                       storer.initStoredDataManager( instruccion.get(2) );
+                    storer.initStoredDataManager(instruccion.get(2));
 
                     meta.setMetadata(metadata);
                     storer.serializeMetadata(meta);
