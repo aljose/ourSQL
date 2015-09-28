@@ -15,7 +15,7 @@ public class testStoredDataManager {
     public static void main(String[] args){
 
 
-        StoredDataManager storedDataManager = new StoredDataManager();
+        StoredDataManager storedDataManager = StoredDataManager.getInstance();
         System.out.println(System.getProperty("user.dir"));
         storedDataManager.createDatabase("prueba");
         storedDataManager.initStoredDataManager("prueba");
@@ -95,9 +95,30 @@ public class testStoredDataManager {
         row = new Row(fields);
         row.setTableName("Tabla2");
         storedDataManager.insertIntoTable(row);
+        fields = new ArrayList<Field>();
+        fields.add(new Field("aaaaaa","String",false,"Tabla2", "prueba2",true));
+        fields.add(new Field("scscxcds;k;l", "String", false,"Tabla2", "prueba2",false));
+        fields.add(new Field(",nlknmlknk","String",false,"Tabla2", "prueba2",false));
+        fields.add(new Field("lkjoijnll","String",false,"Tabla2", "prueba2",false));
+        fields.add(new Field("0090090", "String", false,"Tabla2", "prueba2",false));
+        row = new Row(fields);
+        row.setTableName("Tabla2");
+        storedDataManager.insertIntoTable(row);
         //storedDataManager.createIndex("Tabla2", "index1", 3);
         //storedDataManager.dropDatabase("prueba2");
-        ArrayList<Row> arrayRow =storedDataManager.getAllTuplesFromTable("Tabla2");
+         ArrayList<Row> arrayRow =storedDataManager.getAllTuplesFromTable("Tabla2");
+        for(int i=0;i<arrayRow.size();i++){
+            ArrayList<Field> fieldList= arrayRow.get(i).getColumns();
+            for(int u=0;u<fieldList.size();u++){
+                System.out.print(fieldList.get(u).getContent()+"   ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        storedDataManager.deleteRow("cacabubu", "Tabla2");
+        storedDataManager.deleteRow("ccccc", "Tabla2");
+         arrayRow =storedDataManager.getAllTuplesFromTable("Tabla2");
+         storedDataManager.flushToDisk();
         for(int i=0;i<arrayRow.size();i++){
             ArrayList<Field> fieldList= arrayRow.get(i).getColumns();
             for(int u=0;u<fieldList.size();u++){
@@ -109,6 +130,7 @@ public class testStoredDataManager {
         System.out.println(storedDataManager.numberOfRecords("Tabla2"));
         storedDataManager.dropTable("Tabla2");
         System.out.println(storedDataManager.numberOfRecords("Tabla2"));
+        
 
 
 

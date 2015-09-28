@@ -11,11 +11,12 @@ import Shared.Structures.Metadata;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 
 /**
@@ -24,6 +25,7 @@ import java.util.Set;
  */
 public class StoredDataManager {
 
+    private static StoredDataManager StoredDataManagerInstance=null;
 
     private HashMap<String, ArbolBMas> mHashBtrees;
     private String mCurrentDataBase;
@@ -41,11 +43,19 @@ public class StoredDataManager {
     protected static final String EXTENSION_ARCHIVO_INDICE=".index";
 
 
-    public StoredDataManager(){
+    protected StoredDataManager(){
         //mHashBtrees= new HashMap<String, ArbolBMas>();
     }
+    
+    
+    public static StoredDataManager getInstance() {
+      if(StoredDataManagerInstance == null) {
+         StoredDataManagerInstance = new StoredDataManager();
+      }
+      return StoredDataManagerInstance;
+   }
 
-    /**
+    /**s
      * Metodo encargado de inicializar el stored Data Manager, carga las tablas (en caso de existir) al
      * hasmap de arboles
      */
@@ -57,7 +67,7 @@ public class StoredDataManager {
             if(currentBTrees!=null){
                 if(currentBTrees.length>0){
                     for(int i=0; i<currentBTrees.length; i++){
-                        mHashBtrees.put(currentBTrees[i], deserealizateBtree(currentBTrees[i].substring(0, currentBTrees[i].length()-5)));
+                        getmHashBtrees().put(currentBTrees[i], deserealizateBtree(currentBTrees[i]));
                     }
                 }
             }
@@ -86,7 +96,17 @@ public class StoredDataManager {
      */
     private String[] getCurrentTreeName() throws IOException {
         File directorio = new File(DIRECTORIO_DATOS + File.separator + mCurrentDataBase);
-        return directorio.list(new FilenameFilter() {
+        String[] extension = new String[1];
+        extension[0] = EXTENSION_ARCHIVO_ARBOL.substring(1, EXTENSION_ARCHIVO_ARBOL.length());
+        Collection<File> files=FileUtils.listFiles(directorio, extension, false);
+        String[] result=new String[files.size()];
+        File[] fileArray=files.toArray(new File[files.size()]);
+        for(int i=0;i<files.size();i++){
+            result[i]=FilenameUtils.getBaseName(fileArray[i].toString());
+        }
+        return result;
+                
+                /*directorio.listFile(new FilenameFilter() {
 
             @Override
             public boolean accept(File dir, String name) {
@@ -96,7 +116,7 @@ public class StoredDataManager {
                     return false;
                 }
             }
-        });
+        });*/
     }
 
 
@@ -153,8 +173,8 @@ public class StoredDataManager {
                     lastRowPKIndex=0;
                 }
                 long[] offsets= new long[fields.size()-1];
-                if(this.mHashBtrees.containsKey(targetTable)){
-                    Btree=this.mHashBtrees.get(targetTable);
+                if(this.getmHashBtrees().containsKey(targetTable)){
+                    Btree=this.getmHashBtrees().get(targetTable);
                 }else{
                     System.err.println("Error al ingresar datos, la tabla no existe");
                     return -1;
@@ -173,7 +193,7 @@ public class StoredDataManager {
                 writer.closeFile();
                 Btree.insertar(keyHash.get(rowPKValue), offsets);
                 serializateIndex(keyHash,  targetTable);
-                serializateBtree(mHashBtrees.get(targetTable), targetTable);
+                serializateBtree(getmHashBtrees().get(targetTable), targetTable); //Recordar pasar esto al metodo flushToDisk
                 result= 1;
             }catch(Exception ex){
                 System.err.println("Ha ocurrido un problema al ingresar datos, error: " +ex.getMessage());
@@ -228,14 +248,14 @@ public class StoredDataManager {
                     result=1;
                 }
                 else {
-                    System.err.println("Error al crear base de datos ");
+                    System.err.println("Error al borrar base de datos ");
                     result= -1;
                 }
             }catch(Exception ex){
                 result =-1;
             }
         }else{
-            System.err.println("Error al crear base de datos ");
+            System.err.println("Error al borrar base de datos ");
             result= -1;
         }
         return result;
@@ -332,7 +352,7 @@ public class StoredDataManager {
         try{
             String[] listaTablas= getNombreTablas();
             for(int i=0; i<listaTablas.length;i++){
-                serializateBtree(mHashBtrees.get(listaTablas[i]), listaTablas[i].substring(0, listaTablas[i].length()-3));
+                serializateBtree(getmHashBtrees().get(listaTablas[i]), listaTablas[i]);
             }
             return 1;
         } catch(IOException e){
@@ -350,19 +370,16 @@ public class StoredDataManager {
      */
     private String[] getNombreTablas() throws IOException{
             File directorio = new File(DIRECTORIO_DATOS + File.separator + mCurrentDataBase);
-            String[] listaTablas = directorio.list(new FilenameFilter() {
-
-                @Override
-                public boolean accept(File dir, String name) {
-                    if (name.toLowerCase().endsWith(EXTENSION_ARCHIVO_TABLA)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-            return listaTablas;
+            String[] extension = new String[1];
+        extension[0] = EXTENSION_ARCHIVO_TABLA.substring(1, EXTENSION_ARCHIVO_TABLA.length());
+        Collection<File> files=FileUtils.listFiles(directorio, extension, false);
+        String[] result=new String[files.size()];
+        File[] fileArray=files.toArray(new File[files.size()]);
+        for(int i=0;i<files.size();i++){
+            result[i]=FilenameUtils.getBaseName(fileArray[i].toString());
         }
+        return result;
+    }
 
     
     /**
@@ -393,7 +410,7 @@ public class StoredDataManager {
                 RandomAccessFile file= new RandomAccessFile(DIRECTORIO_DATOS+File.separator+mCurrentDataBase+File.separator+name+EXTENSION_ARCHIVO_TABLA, "rw");
                 file.close();
                 Btree.setNombreArbol(name);
-                this.mHashBtrees.put(name,Btree);
+                this.getmHashBtrees().put(name,Btree);
                 serializateIndex(hashKeys,name);
                 result=1;
             } catch (IOException exc){
@@ -417,7 +434,7 @@ public class StoredDataManager {
     /**
      * Metodo que setea un booleano cuando si el  StoredDataManager se encuentra inicializado
      * @param isInitialized 
-     */
+     */ 
     private void setIsInitialized(boolean isInitialized) {
         this.isInitialized = isInitialized;
     }
@@ -451,10 +468,8 @@ public class StoredDataManager {
             deserializedMetadata= (Metadata) inputStream.readObject();
             inputStream.close();
             inputFile.close();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println("No se ha podido deserealizar el arbol, error: "+ e.getMessage());
-        } catch (ClassNotFoundException e) {
-             System.err.println("No se ha podido deserealizar el arbol, error: "+ e.getMessage());
         }
         return deserializedMetadata;
     }
@@ -553,6 +568,10 @@ public class StoredDataManager {
                             pkValue=entry.getKey();
                         }
                     }
+                    if(pkValue==null){
+                        numberRecords++;
+                        continue;
+                    }
                     Field pkField=new Field(pkValue,"",false,tableName,this.getmCurrentDataBase(),true);
                     fieldList.add(pkField);
                     for(int u=0; u<arrayLong.length;u++){
@@ -577,10 +596,86 @@ public class StoredDataManager {
         }
         
         
-        public int deleteRow(String pkRow){
-            return 0;
+        public int deleteRow(String rowPKValue, String targetTable){
+            int result=-1;
+            if(getisInitialized()){
+                ArbolBMas Btree;
+                LinkedHashMap<String,Long> keyHash;
+                try{
+                    DBWriter writer= new DBWriter();
+                    writer.setTableFile(DIRECTORIO_DATOS + File.separator + getmCurrentDataBase() + File.separator + targetTable + EXTENSION_ARCHIVO_TABLA);
+                    keyHash= deserializateIndex(targetTable);
+                    if(this.getmHashBtrees().containsKey(targetTable)){
+                        Btree=this.getmHashBtrees().get(targetTable);
+                        long[] fileFieldsPointers =(long[])Btree.search(keyHash.get(rowPKValue));
+                        for(int i=0;i<fileFieldsPointers.length;i++){
+                            result=writer.deleteFromDBFile(fileFieldsPointers[i]);
+                        }
+                        writer.closeFile();
+                        //Btree.eliminar(keyHash.get(rowPKValue));
+                        keyHash.remove(rowPKValue);
+                    }else{
+                        System.err.println("Error al eliminar la fila, la tabla no existe");
+                        return -1;
+                    }
+                    serializateIndex(keyHash,  targetTable);
+                    serializateBtree(getmHashBtrees().get(targetTable), targetTable);
+                    result= 1;
+                }catch(Exception ex){
+                    System.err.println("Ha ocurrido un problema al eliminar la fila, error: " +ex.getMessage());
+                    result= -1;
+                }
+            }
+            return result;
+        }
+        /*
+        
+        public updateTuple(String pkValue, Row rowToUpdate){
+            if(getisInitialized()){
+                String targetTable= rowToUpdate.getTableName();
+                int numberRecords= numberOfRecords(targetTable);
+                ArbolBMas Btree = getmHashBtrees().get(targetTable);
+                LinkedHashMap<String,Long> keyHash= deserializateIndex(targetTable);
+                DBReader reader= new DBReader();
+                reader.setTableFile(DIRECTORIO_DATOS+File.separator+getmCurrentDataBase()+File.separator+targetTable+EXTENSION_ARCHIVO_TABLA);
+                
+                for(long i=0; i<numberRecords; i++){
+                    Row fila=new Row();
+                    ArrayList<Field> fieldList= new ArrayList<Field>();
+                    long[] arrayLong=(long[]) Btree.search(i);
+                    String pkValue = null;
+                    for (Map.Entry<String, Long> entry : keyHash.entrySet()) {
+                        if(entry.getValue().equals(i)){
+                            pkValue=entry.getKey();
+                        }
+                    }
+                    if(pkValue==null){
+                        numberRecords++;
+                        continue;
+                    }
+                    Field pkField=new Field(pkValue,"",false,tableName,this.getmCurrentDataBase(),true);
+                    fieldList.add(pkField);
+                    for(int u=0; u<arrayLong.length;u++){
+                        DBField dataFilefield= reader.readFromDBFile(arrayLong[u]);
+                        if(dataFilefield!=null){
+                            Field dataField= new Field(dataFilefield.getValue(),"",false,tableName,this.getmCurrentDataBase(),false);
+                            fieldList.add(dataField);
+                        }else{
+                            System.err.println("ha ocurrido un error al obtener los campos desde el hdd" );
+                            return null;
+                        }
+                    }
+                    fila.setColumns(fieldList);
+                    rowList.add(fila);
+                }
+                reader.closeFile();
+                return rowList;
+            }else{
+            System.err.println("Necesita inicializar el StoredDataManager " );
+            return null;
+               }
         }
         
-        
+        */
          
 }
