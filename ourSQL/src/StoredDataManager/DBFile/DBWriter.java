@@ -70,6 +70,7 @@ public class DBWriter {
     public int deleteFromDBFile(long position){
         if(this.isInitialized){
             try{
+                file.seek(position);
                 file.writeInt(-1);
                 long lenthOfFile= file.length();
                 file.seek(lenthOfFile);
