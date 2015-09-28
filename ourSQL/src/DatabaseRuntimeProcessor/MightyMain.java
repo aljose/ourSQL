@@ -249,6 +249,7 @@ public class MightyMain {
 
                 meta.setMetadata(metadata);
                 storer.serializeMetadata(meta);
+                storer.initStoredDataManager(databaseName);
                 break;
 
             case "alter":
