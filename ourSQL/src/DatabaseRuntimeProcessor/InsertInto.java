@@ -22,9 +22,9 @@ public class InsertInto {
 
     public void executeInsertion(String tableName, ArrayList<String> columns, ArrayList<String> values, String schemaName) {
         boolean doesExist;
-        insertManager =  StoredDataManager.getInstance();
-        Row rowToInsert = new Row();
-        doesExist = verifyExistence(schemaName, tableName, columns.get(0));
+        insertManager = StoredDataManager.getInstance();
+        Row rowToInsert;
+        doesExist = true; //verifyExistence(schemaName, tableName, columns.get(0));
         
         if (doesExist) {
             System.out.println("existe la tabla");
@@ -88,21 +88,20 @@ public class InsertInto {
     private Row buildRow(ArrayList<String> columns, ArrayList<String> values, String tableName, String schemaName) {
         Row newTuple = new Row();
         ArrayList<Field> temp = new ArrayList<Field>();
-        Field element = new Field();
+        boolean isPK=false;
+        
         for (int i = 0; i < columns.size(); i++) {
+            Field element = new Field();
             if (i == 0) {
-                element.setContent(values.get(i));
-                element.setSchemaName(schemaName);
-                element.setTableName(tableName);
-                element.setPrimaryKey(true);
-                temp.add(element);
+                isPK=true;
             } else {
-                element.setContent(values.get(i));
-                element.setSchemaName(schemaName);
-                element.setTableName(tableName);
-                element.setPrimaryKey(false);
-                temp.add(element);
+                isPK=false;
             }
+            element.setContent(values.get(i));
+            element.setSchemaName(schemaName);
+            element.setTableName(tableName);
+            element.setPrimaryKey(isPK);
+            temp.add(i, element);
         }
         newTuple.setColumns(temp);
         newTuple.setTableName(tableName);
